@@ -11,7 +11,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "./App.css";
-import characters from './protagonists.json'
+import characters from './protagonists.json';
+import CharacterCard from './CharacterCard'
 
 function App() {
 
@@ -68,38 +69,20 @@ function App() {
 
           {characters.map((entry) => (
           <Grid item xs={12} md={4}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="350px"
-                image={entry.pic}
-              />
-              <CardHeader
-                title={entry.title}
-                titleTypographyProps={{ align: "center" }}
-                sx={{ mt: 1 }}
-              />
-              <CardContent sx={{ pt: 0 }}>
-                <ul>
-                {entry.description.map((descriptionBulletPoint) => (
-                <Typography component="li">
-                  {descriptionBulletPoint}
-                </Typography>
-                  ))}               
-                </ul>
-              </CardContent>
-              <CardActions>
-                <Button
-                  //variant="contained"
-                  sx={{ px: 6, mx: "auto", border: "1px solid black", variant: "outlined" }}            
-                >
-                  Vote
-                </Button>
-              </CardActions>
-            </Card>        
+            <CharacterCard title = {entry.title}
+              image = {entry.pic} description = {entry.description}
+            /> 
+
+          
+           
+      
           </Grid>
           ))}
+
+       
+        
         </Grid> 
+       
         
       </Container>
     </div>
