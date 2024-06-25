@@ -11,9 +11,11 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "./App.css";
-// import characters from './protagonists.json'
+import characters from './protagonists.json'
 
 function App() {
+
+  console.log("Chars from JSON", characters);
   return (
     <div className="App">
       <CssBaseline />
@@ -44,7 +46,7 @@ function App() {
           color="text.primary"
           sx={{ py: 2 }}
         >
-          Prevalent Protagonists
+          Hello.
         </Typography>
         <Typography
           variant="h5"
@@ -63,44 +65,42 @@ function App() {
           justifyContent="center"
           alignItems="flex-start"
         >
+
+          {characters.map((entry) => (
           <Grid item xs={12} md={4}>
             <Card>
               <CardMedia
                 component="img"
                 height="350px"
-                image={"https://i.imgur.com/56chgMj.png"}
+                image={entry.pic}
               />
               <CardHeader
-                title={"Miles Morales"}
+                title={entry.title}
                 titleTypographyProps={{ align: "center" }}
                 sx={{ mt: 1 }}
               />
               <CardContent sx={{ pt: 0 }}>
                 <ul>
-                  <Typography component="li">
-                    Definitely Not Spiderman
-                  </Typography>
-                  <Typography component="li">
-                    "Lanky Puberty Boy" vibes
-                  </Typography>
-                  <Typography component="li">Can't do it on demand</Typography>
-                  <Typography component="li">Elite music taste</Typography>
+                {entry.description.map((descriptionBulletPoint) => (
+                <Typography component="li">
+                  {descriptionBulletPoint}
+                </Typography>
+                  ))}               
                 </ul>
               </CardContent>
               <CardActions>
                 <Button
                   variant="contained"
-                  sx={{ px: 6, mx: "auto" }}
-                  // I'm trying to use custom CSS defined in the file App.css,
-                  // but it isn't working. Why, and how can I fix it?
-                  className="characterButton"
+                  sx={{ px: 6, mx: "auto", border: "5px solid black", variant: "outlined" }}            
                 >
                   Vote
                 </Button>
               </CardActions>
-            </Card>
+            </Card>        
           </Grid>
-        </Grid>
+          ))}
+        </Grid> 
+        
       </Container>
     </div>
   );
