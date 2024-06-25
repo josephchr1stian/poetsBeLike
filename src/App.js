@@ -54,7 +54,7 @@ function App() {
           color="text.secondary"
           sx={{ mx: 10 }}
         >
-          Hmm, seems like we're missing some of the other protagonists.
+          Roster
         </Typography>
       </Container>
       {/* End hero unit */}
@@ -90,8 +90,8 @@ function App() {
               </CardContent>
               <CardActions>
                 <Button
-                  variant="contained"
-                  sx={{ px: 6, mx: "auto", border: "5px solid black", variant: "outlined" }}            
+                  //variant="contained"
+                  sx={{ px: 6, mx: "auto", border: "1px solid black", variant: "outlined" }}            
                 >
                   Vote
                 </Button>
