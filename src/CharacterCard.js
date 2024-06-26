@@ -36,11 +36,34 @@ export default function CharacterCard(props) {
               <CardActions>
                 <Button
                   //variant="contained"
-                  sx={{ px: 6, mx: "auto", border: "1px solid black", variant: "outlined" }}            
+                  sx={{ px: 6, mx: "auto", border: "1px solid black", variant: "outlined" }}   
+                  onClick={() => {
+                    fetchFact();
+                  }}  
+                        
                 >
-                  Vote
+                 click 4 fact 
                 </Button>
               </CardActions>
     </Card>        
   );
+}
+
+
+
+function fetchFact() {
+
+
+  const requestOptions = {
+    method: "GET",
+    redirect: "follow"
+  };  
+  fetch("https://uselessfacts.jsph.pl/api/v2/facts/random", requestOptions)
+  .then((response) => response.json())
+  .then((result) => {
+    console.log(result)
+    alert(result.text)
+  })
+  .catch((error) => console.error(error));
+
 }

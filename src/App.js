@@ -10,8 +10,13 @@ import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+
 import "./App.css";
 import characters from './protagonists.json';
+import Icon from '@mui/material/Icon';
+import OutletIcon from '@mui/icons-material/Outlet';
 import CharacterCard from './CharacterCard'
 
 function App() {
@@ -59,6 +64,18 @@ function App() {
         </Typography>
       </Container>
       {/* End hero unit */}
+
+
+      
+      <Tooltip disableFocusListener disableTouchListener placement="top" title = "hiiiii">
+        
+          <IconButton title= {getRandFact()}> 
+            <OutletIcon />      
+          </IconButton>
+        
+      </Tooltip>
+
+
       <Container maxWidth="lg">
         <Grid
           container
@@ -72,21 +89,31 @@ function App() {
             <CharacterCard title = {entry.title}
               image = {entry.pic} description = {entry.description}
             /> 
-
-          
-           
-      
           </Grid>
           ))}
-
-       
-        
         </Grid> 
-       
-        
+
       </Container>
     </div>
   );
+}
+
+function getRandFact() {
+
+
+  const requestOptions = {
+    method: "GET",
+    redirect: "follow"
+  };  
+  fetch("https://uselessfacts.jsph.pl/api/v2/facts/random", requestOptions)
+  .then((response) => response.json())
+  .then((result) => {
+    console.log(result)
+    return result.text;
+    
+  })
+  .catch((error) => console.error(error));
+
 }
 
 export default App;
