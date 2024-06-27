@@ -7,9 +7,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CardHeader from "@mui/material/CardHeader";
+import { useState } from 'react';
 
 
 export default function CharacterCard(props) {
+  const [counter, setCounter] = useState(0)
+
+
   return (
     <Card>
               <CardMedia
@@ -28,8 +32,11 @@ export default function CharacterCard(props) {
                 {props.description.map((descriptionBulletPoint) => (
                 <Typography component="li">
                   {descriptionBulletPoint}
+                  
                 </Typography>
                   ))}     
+                  <Typography variant = "h1" > {counter}</Typography> 
+                  <Typography variant = "h3" > bands</Typography>
                                
                 </ul>
               </CardContent>
@@ -38,12 +45,14 @@ export default function CharacterCard(props) {
                   //variant="contained"
                   sx={{ px: 6, mx: "auto", border: "1px solid black", variant: "outlined" }}   
                   onClick={() => {
-                    fetchFact();
+                    setCounter(counter + 1);
                   }}  
                         
                 >
-                 click 4 fact 
+                 click 2 give a dollar  
+                
                 </Button>
+                
               </CardActions>
     </Card>        
   );

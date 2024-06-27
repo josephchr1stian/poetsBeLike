@@ -18,11 +18,39 @@ import characters from './protagonists.json';
 import Icon from '@mui/material/Icon';
 import OutletIcon from '@mui/icons-material/Outlet';
 import CharacterCard from './CharacterCard'
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import { useState } from 'react';
+
+
+
+
 
 function App() {
-
+  
+  
+  
   console.log("Chars from JSON", characters);
+  const [status, setStatus] = useState('')
+  function fetchFact() {
+
+
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };  
+    fetch("https://uselessfacts.jsph.pl/api/v2/facts/random", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result.text)
+      setStatus(result.text)
+      //let subtitle  = document.getElementById("subtitle")
+      //subtitle.innerHTML = myFact;
+    })
+    .catch((error) => console.error(error));
+  
+  }
   return (
+    
     <div className="App">
       <CssBaseline />
       <AppBar
@@ -39,13 +67,14 @@ function App() {
             href="#"
             variant="outlined"
             sx={{ my: 1, mx: 1.5 }}
-            onClick={() => alert("Boop!")}
+            onClick={() => fetchFact()}
           >
             Button
           </Button>
         </Toolbar>
       </AppBar>
       <Container maxWidth="md" sx={{ my: 4 }}>
+      
         <Typography
           variant="h2"
           align="center"
@@ -59,22 +88,12 @@ function App() {
           align="center"
           color="text.secondary"
           sx={{ mx: 10 }}
+          id = "subtitle"
         >
-          Roster
+         {status}
         </Typography>
       </Container>
       {/* End hero unit */}
-
-
-      
-      <Tooltip disableFocusListener disableTouchListener placement="top" title = "hiiiii">
-        
-          <IconButton title= {getRandFact()}> 
-            <OutletIcon />      
-          </IconButton>
-        
-      </Tooltip>
-
 
       <Container maxWidth="lg">
         <Grid
@@ -98,7 +117,7 @@ function App() {
   );
 }
 
-function getRandFact() {
+function fetchFact() {
 
 
   const requestOptions = {
@@ -108,12 +127,12 @@ function getRandFact() {
   fetch("https://uselessfacts.jsph.pl/api/v2/facts/random", requestOptions)
   .then((response) => response.json())
   .then((result) => {
-    console.log(result)
-    return result.text;
-    
+    console.log(result.text)
+    return(result.text)
+    //let subtitle  = document.getElementById("subtitle")
+    //subtitle.innerHTML = myFact;
   })
   .catch((error) => console.error(error));
 
 }
-
 export default App;
