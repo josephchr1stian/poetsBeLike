@@ -12,7 +12,9 @@ import { useState } from 'react';
 
 export default function CharacterCard(props) {
   const [counter, setCounter] = useState(0)
-
+  const [poemLines, setPoemLines] = useState([])
+  //const[poemImage, setPoemImage] = useState()
+  const [poemTitle, setPoemTitle] = useState("null")
 
   return (
     <Card>
@@ -22,19 +24,21 @@ export default function CharacterCard(props) {
                 image={props.image}
               />
               <CardHeader
-                title={props.title}
+                //title={props.title}
+                title = {poemTitle}
                 titleTypographyProps={{ align: "center" }}
                 sx={{ mt: 1 }}
               />
               <CardContent sx={{ pt: 0 }}>
                 <ul>
-                
-                {props.description.map((descriptionBulletPoint) => (
+          
+                {poemLines.map((line, index) => (
+
                 <Typography component="li">
-                  {descriptionBulletPoint}
-                  
+                  {index+1} - {line}
                 </Typography>
                   ))}     
+
                   <Typography variant = "h1" > {counter}</Typography> 
                   <Typography variant = "h3" > bands</Typography>
                                
@@ -45,6 +49,7 @@ export default function CharacterCard(props) {
                   //variant="contained"
                   sx={{ px: 6, mx: "auto", border: "1px solid black", variant: "outlined" }}   
                   onClick={() => {
+                    fetchPoem();
                     setCounter(counter + 1);
                   }}  
                         
@@ -54,15 +59,31 @@ export default function CharacterCard(props) {
                 </Button>
                 
               </CardActions>
-    </Card>        
-  );
+    </Card>  
+  )
+
+  function fetchPoem() {
+    let poemNum = Math.floor(Math.random() * 10);
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };  
+    fetch("https://poetrydb.org/author/Dickinson", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      let res = result[poemNum]
+      console.log(res)
+      setPoemLines(result[poemNum].lines)
+      setPoemTitle(res.title)
+    })
+    .catch((error) => console.error(error));
+  
+  }
 }
 
 
 
 function fetchFact() {
-
-
   const requestOptions = {
     method: "GET",
     redirect: "follow"

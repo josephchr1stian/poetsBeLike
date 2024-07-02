@@ -21,14 +21,14 @@ import CharacterCard from './CharacterCard'
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useState } from 'react';
 
+import fetchPoem from './CharacterCard'
+
 
 
 
 
 function App() {
-  
-  
-  
+
   console.log("Chars from JSON", characters);
   const [status, setStatus] = useState('')
   function fetchFact() {
@@ -43,14 +43,13 @@ function App() {
     .then((result) => {
       console.log(result.text)
       setStatus(result.text)
-      //let subtitle  = document.getElementById("subtitle")
-      //subtitle.innerHTML = myFact;
+
     })
     .catch((error) => console.error(error));
   
   }
+  
   return (
-    
     <div className="App">
       <CssBaseline />
       <AppBar
@@ -61,7 +60,7 @@ function App() {
       >
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Characters Inc
+            welcome.
           </Typography>
           <Button
             href="#"
@@ -81,7 +80,7 @@ function App() {
           color="text.primary"
           sx={{ py: 2 }}
         >
-          Hello.
+          poetsBeLike.
         </Typography>
         <Typography
           variant="h5"
@@ -106,7 +105,7 @@ function App() {
           {characters.map((entry) => (
           <Grid item xs={12} md={4}>
             <CharacterCard title = {entry.title}
-              image = {entry.pic} description = {entry.description}
+              image = {entry.pic} description = {entry.description} 
             /> 
           </Grid>
           ))}
