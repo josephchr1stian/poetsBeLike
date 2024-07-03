@@ -11,15 +11,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import "./App.css";
-import characters from "./protagonists.json";
 import CharacterCard from "./CharacterCard";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useState } from "react";
-import fetchPoem from "./CharacterCard";
 import { Stack } from "@mui/material";
 import Box from "@mui/material/Box";
-import Input from "@mui/material/Input";
 
 function App() {
   const [status, setStatus] = useState("");
@@ -32,7 +29,7 @@ function App() {
   const [wordThree, setWordThree] = useState("");
   const [userScore, setUserScore] = useState(0);
   const [poemList, setPoemList] = useState();
-  const [matchPoems, setMatch] = useState();
+  const [matchPoems, setMatch] = useState([]);
 
   function fetchAuthorList() {
     const requestOptions = {
@@ -48,9 +45,10 @@ function App() {
       })
       .catch((error) => console.error(error));
   }
-  function showMatches(poetName) {
-    console.log("From Show Matches", poemList);
+  function findMatches(poetName) {
+    fetchPoems(poetName);
     const matches = new Set(); // will hold the matched entry
+    if(poemList){
     poemList.map((entry) => {
       let allWordString = entry.lines.join(" ").toLowerCase(); //join the array of lines and make it all lower case
       let wordArray = allWordString.split(" "); // Split the string into an array of words
@@ -58,12 +56,13 @@ function App() {
       const answerSet = new Set(wordChoices);
       for (let i of answerSet) {
         if (wordSet.has(i)) {
-          matches.add(entry)
+          matches.add(entry);
         }
       }
-    });
-    console.log(matches);
-    setMatch(matches);
+    })};
+    setMatch(Array.from(matches));
+    setUserScore(matches.size)
+    console.log("Log Matched objects", matches)
   }
   function fetchPoems(poetName) {
     //let poemNum = Math.floor(Math.random() * 10);
@@ -76,7 +75,7 @@ function App() {
       .then((response) => response.json())
       .then((result) => {
         let res = result;
-        //console.log("From Poem Function Call", res);
+        //console.log("From fetch poem", res);
         //put the object in a var
         setPoemList(res);
       })
@@ -147,7 +146,7 @@ function App() {
               console.log("Word Choices are: " + wordChoices);
               //console.log(authorChoice)
               console.log(authorInput);
-              showMatches(authorChoice);
+              findMatches(authorChoice);
             }}
           >
             lock In
@@ -207,25 +206,18 @@ function App() {
       {/* End hero unit */}
 
       <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={5}
-          justifyContent="center"
-          alignItems="flex-start"
-        >
-          {characters.map((entry) => (
-            <Grid item xs={12} md={4}>
-              <CharacterCard
-                title={entry.title}
-                image={entry.pic}
-                description={entry.description}
-              />
-            </Grid>
+        <Grid container spacing={5}  justifyContent="center" alignItems="flex-start" >
+          {[...matchPoems].map((entry, index) => (
+            <Grid item xs={12} md={4} key = {index}>
+            <CharacterCard
+              title={entry.title}
+              description={entry.lines}
+            />
+          </Grid>
           ))}
         </Grid>
       </Container>
     </div>
   );
 }
-
 export default App;
