@@ -18,6 +18,12 @@ import characters from './protagonists.json';
 import Icon from '@mui/material/Icon';
 import OutletIcon from '@mui/icons-material/Outlet';
 import CharacterCard from './CharacterCard'
+
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+
+
+
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import { useState } from 'react';
 
@@ -31,19 +37,25 @@ function App() {
 
   console.log("Chars from JSON", characters);
   const [status, setStatus] = useState('')
-  function fetchFact() {
+  const[authorList, setAuthorList] = useState([]);
+  const [authorChoice, setAuthorChoice] = useState("Dickinson")
+ 
+ 
+ 
+  function fetchAuthorList() {
 
 
     const requestOptions = {
       method: "GET",
       redirect: "follow"
     };  
-    fetch("https://uselessfacts.jsph.pl/api/v2/facts/random", requestOptions)
+    fetch("https://poetrydb.org/author", requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result.text)
-      setStatus(result.text)
-
+      
+      console.log(result.authors)
+      console.log(authorList)
+      setAuthorList(result.authors)
     })
     .catch((error) => console.error(error));
   
@@ -66,9 +78,9 @@ function App() {
             href="#"
             variant="outlined"
             sx={{ my: 1, mx: 1.5 }}
-            onClick={() => fetchFact()}
+            onClick={() => fetchAuthorList()}
           >
-            Button
+            load it...
           </Button>
         </Toolbar>
       </AppBar>
@@ -82,6 +94,16 @@ function App() {
         >
           poetsBeLike.
         </Typography>
+        <Autocomplete
+      
+          disablePortal
+          
+          id="combo-box-demo"
+          options={authorList}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Poets" />}                    
+        />
+    
         <Typography
           variant="h5"
           align="center"
