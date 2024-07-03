@@ -54,6 +54,23 @@ export default function CharacterCard(props) {
         </ul>
       </CardContent>
       <CardActions>
+        {/* <Button
+          //variant="contained"
+          sx={{
+            px: 6,
+            mx: "auto",
+            border: "1px solid black",
+            variant: "outlined",
+          }}
+          onClick={() => {
+            fetchPoem();
+            findMostCommonWord(poemLines.join(" "));
+            setImage();
+            setCounter(counter + 1);
+          }}
+        >
+          load poem
+        </Button> */}
       </CardActions>
     </Card>
   );

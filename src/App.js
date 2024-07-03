@@ -11,10 +11,9 @@ import Card from "@mui/material/Card";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Stack } from "@mui/material";
 import Box from "@mui/material/Box";
-import cutiveMono from "./CutiveMono-Regular.ttf";
-import { RequestPageSharp } from "@mui/icons-material";
 
 export default function App() {
   const [status, setStatus] = useState("");
@@ -29,6 +28,8 @@ export default function App() {
   const [poemList, setPoemList] = useState();
   const [matchPoems, setMatch] = useState([]);
   const [titleWord, setTitleWord] = useState([]);
+  const [matchPoems, setMatch] = useState([]);
+
   function fetchAuthorList() {
     const requestOptions = {
       method: "GET",
@@ -56,12 +57,26 @@ export default function App() {
           if (wordSet.has(i)) {
             matches.add(entry);
           }
+    if(poemList){
+    poemList.map((entry) => {
+      let allWordString = entry.lines.join(" ").toLowerCase(); //join the array of lines and make it all lower case
+      let wordArray = allWordString.split(" "); // Split the string into an array of words
+      const wordSet = new Set(wordArray); // make a set of all words
+      const answerSet = new Set(wordChoices);
+      for (let i of answerSet) {
+        if (wordSet.has(i)) {
+          matches.add(entry);
         }
       });
     }
     setMatch(Array.from(matches));
     setUserScore(matches.size);
     console.log("Log Matched objects", matches);
+      }
+    })};
+    setMatch(Array.from(matches));
+    setUserScore(matches.size)
+    console.log("Log Matched objects", matches)
   }
   function fetchPoems(poetName) {
     //let poemNum = Math.floor(Math.random() * 10);
@@ -74,6 +89,8 @@ export default function App() {
       .then((response) => response.json())
       .then((result) => {
         let res = result;
+        //console.log("From fetch poem", res);
+        //put the object in a var
         setPoemList(res);
       })
       .catch((error) => console.error(error));
@@ -172,6 +189,7 @@ export default function App() {
               console.log(wordThree);
               console.log(authorInput);
               setMatch(findMatches(authorChoice, wordOne, wordTwo, wordThree)); // Pass all the words to the find matches rather than making a new object/ set. set poens to what we find
+              findMatches(authorChoice);
             }}
           >
             search lines
@@ -245,9 +263,18 @@ export default function App() {
                 keywords={wordChoices}
               />
             </Grid>
+        <Grid container spacing={5}  justifyContent="center" alignItems="flex-start" >
+          {[...matchPoems].map((entry, index) => (
+            <Grid item xs={12} md={4} key = {index}>
+            <CharacterCard
+              title={entry.title}
+              description={entry.lines}
+            />
+          </Grid>
           ))}
         </Grid>
       </Container>
     </div>
   );
 }
+export default App;
