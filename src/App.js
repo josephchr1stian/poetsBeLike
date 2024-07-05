@@ -11,86 +11,65 @@ import Card from "@mui/material/Card";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useEffect, useState } from "react";
-import { CardMedia, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import cutiveMono from "./CutiveMono-Regular.ttf"
 import { RequestPageSharp } from "@mui/icons-material";
 
 
-function fetchAuthorList() {
-  const requestOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
-  fetch("https://poetrydb.org/author", requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      return result.authors;
-    })
-    .catch((error) => console.error(error));
-}
-function findMatches(poetName, wordOne, wordTwo, wordThree) {
-  const keywords = [wordOne.toLowerCase(), wordTwo.toLowerCase(), wordThree.toLowerCase()]
-  const poems = fetchPoems(poetName);
-// The poem object is filled with an API. We parse thru it and only return the ones that match our keyword. We use what we return to set the state variable in our component
-  return poems.filter(entry => {
-    return entry.lines.some(line => {
-      return keywords.some(keyword => line.toLowerCase().includes(keyword))
-    })
-  })
-}
-function fetchPoems(poetName) {
-  const requestOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
-  fetch("https://poetrydb.org/author/" + poetName, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      return result
-    })
-    .catch((error) => console.error(error));
-}
-// fetch title will matches will find all titles from any author that have keyword
-function fetchTitleMatches(wordOne) {
-  //let poemNum = Math.floor(Math.random() * 10);
-  console.log("you are trying to fetch poems with titles that contain", wordOne);
-  const requestOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
-  fetch("https://poetrydb.org/title/" + wordOne, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      let res = result;
-      console.log("sent req was:", )
-      return result// set match to res, set score to res.length
-    })
-    .catch((error) => console.error(error));
-}
-
-
-
-function App() {
-  const [status, setStatus] = useState("");
-  const [authorList, setAuthorList] = useState([]);
-  const [authorChoice, setAuthorChoice] = useState("Emily Dickinson");
-  const [authorInput, setAuthorInput] = useState(authorChoice);
-
-  const [wordOne, setWordOne] = useState("");
-  const [wordTwo, setWordTwo] = useState("");
-  const [wordThree, setWordThree] = useState("");
-  const [userScore, setUserScore] = useState(0);
-  const [poemList, setPoemList] = useState();
-  const [matchPoems, setMatch] = useState([]);
-  const [titleWord, setTitleWord] = useState([]);
-
-
+  function fetchAuthorList() {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+    fetch("https://poetrydb.org/author", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.authors);
+        console.log(authorList);
+        setAuthorList(result.authors);
+      })
+      .catch((error) => console.error(error));
+  }
+  function findMatches(poetName) {
+    fetchPoems(poetName);
+    const matches = new Set(); // will hold the matched entry
+    if(poemList){
+    poemList.map((entry) => {
+      let allWordString = entry.lines.join(" ").toLowerCase(); //join the array of lines and make it all lower case
+      let wordArray = allWordString.split(" "); // Split the string into an array of words
+      const wordSet = new Set(wordArray); // make a set of all words
+      const answerSet = new Set(wordChoices);
+      for (let i of answerSet) {
+        if (wordSet.has(i)) {
+          matches.add(entry);
+        }
+      }
+    })};
+    setMatch(Array.from(matches));
+    setUserScore(matches.size)
+    console.log("Log Matched objects", matches)
+  }
+  function fetchPoems(poetName) {
+    //let poemNum = Math.floor(Math.random() * 10);
+    console.log("you are trying to fetch", poetName);
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+    fetch("https://poetrydb.org/author/" + poetName, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        let res = result;
+        setPoemList(res);
+      })
+      .catch((error) => console.error(error));
+  }
   useEffect(() => {
     // Everything in here gets run once on first page load
-    setAuthorList(fetchAuthorList());
+    fetchAuthorList();
   }, []);
-
+  
   return (
     <div className="App">
       <CssBaseline  />
@@ -100,6 +79,12 @@ function App() {
         elevation={0}
         sx={{ borderBottom: "1px solid lightgray" }}
       >
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            welcome.
+          </Typography>
+
+        </Toolbar>
       </AppBar>
       <Container maxWidth="md" sx={{ my: 4 }}>
         <Typography
@@ -128,17 +113,17 @@ function App() {
             id="combo-box-demo"
             options={authorList}
             onChange={(event, newValue) => {
-              if (newValue != null) {
-                setAuthorInput(newValue);
-                console.log("New Value is " + authorInput);
-              }
+              if(newValue != null){
+              setAuthorInput(newValue);
+              console.log("New Value is " + authorInput);
+            }
             }}
             inputValue={authorInput}
             onInputChange={(event, newInputValue) => {
-              if (newInputValue != null) {
-                setAuthorChoice(newInputValue);
-                setAuthorInput(newInputValue);
-              }
+              if(newInputValue != null){
+              setAuthorChoice(newInputValue);
+              setAuthorInput(newInputValue);
+            }
             }}
             value={authorChoice}
             sx={{ width: 300 }}
@@ -242,16 +227,13 @@ function App() {
           alignItems="flex-start"
         >
           {[...matchPoems].map((entry, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <CharacterCard
-                title={entry.title}
-                description={entry.lines}
-                //keywords={wordChoices}
-                wordUno = {wordOne}
-                wordDos = {wordTwo}
-                wordTres = {wordThree}
-              />
-            </Grid>
+            <Grid item xs={12} md={4} key = {index}>
+            <CharacterCard
+              title={entry.title}
+              description={entry.lines}
+              keywords = {wordChoices}
+            />
+          </Grid>
           ))}
         </Grid>
       </Container>
