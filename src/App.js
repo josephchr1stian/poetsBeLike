@@ -1,10 +1,5 @@
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,7 +9,7 @@ import "./App.css";
 import CharacterCard from "./CharacterCard";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 
@@ -75,13 +70,15 @@ function App() {
       .then((response) => response.json())
       .then((result) => {
         let res = result;
-        //console.log("From fetch poem", res);
-        //put the object in a var
         setPoemList(res);
       })
       .catch((error) => console.error(error));
   }
-
+  useEffect(() => {
+    // Everything in here gets run once on first page load
+    fetchAuthorList();
+  }, []);
+  
   return (
     <div className="App">
       <CssBaseline />
@@ -95,14 +92,7 @@ function App() {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             welcome.
           </Typography>
-          <Button
-            href="#"
-            variant="outlined"
-            sx={{ my: 1, mx: 1.5 }}
-            onClick={() => fetchAuthorList()}
-          >
-            load it...
-          </Button>
+
         </Toolbar>
       </AppBar>
       <Container maxWidth="md" sx={{ my: 4 }}>
@@ -120,13 +110,17 @@ function App() {
             id="combo-box-demo"
             options={authorList}
             onChange={(event, newValue) => {
+              if(newValue != null){
               setAuthorInput(newValue);
               console.log("New Value is " + authorInput);
+            }
             }}
             inputValue={authorInput}
             onInputChange={(event, newInputValue) => {
+              if(newInputValue != null){
               setAuthorChoice(newInputValue);
               setAuthorInput(newInputValue);
+            }
             }}
             value={authorChoice}
             sx={{ width: 300 }}
@@ -212,6 +206,7 @@ function App() {
             <CharacterCard
               title={entry.title}
               description={entry.lines}
+              keywords = {wordChoices}
             />
           </Grid>
           ))}
