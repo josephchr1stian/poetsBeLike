@@ -7,15 +7,16 @@ import Container from "@mui/material/Container";
 import "./App.css";
 import CharacterCard from "./CharacterCard";
 import Card from "@mui/material/Card";
-//import CardMedia from "@mui/material/CardMedia";
+import Toolbar from "@mui/material/Toolbar";
+import CardMedia from "@mui/material/CardMedia";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 
-export default function App() {
+function App() {
   const [status, setStatus] = useState("");
   const [authorList, setAuthorList] = useState([]);
   const [authorChoice, setAuthorChoice] = useState("Emily Dickinson");
@@ -26,9 +27,9 @@ export default function App() {
   const [wordThree, setWordThree] = useState("");
   const [userScore, setUserScore] = useState(0);
   const [poemList, setPoemList] = useState();
-  const [matchPoems, setMatch] = useState([]);
+  const [matchPoems, setMatchPoems] = useState([]);
   const [titleWord, setTitleWord] = useState([]);
-  const [matchPoems, setMatch] = useState([]);
+
 
   function fetchAuthorList() {
     const requestOptions = {
@@ -44,40 +45,13 @@ export default function App() {
       })
       .catch((error) => console.error(error));
   }
+
+
   function findMatches(poetName) {
-    fetchPoems(poetName);
-    const matches = new Set(); // will hold the matched entry
-    if (poemList) {
-      poemList.map((entry) => {
-        let allWordString = entry.lines.join(" ").toLowerCase(); //join the array of lines and make it all lower case
-        let wordArray = allWordString.split(" "); // Split the string into an array of words
-        const wordSet = new Set(wordArray); // make a set of all words
-        const answerSet = new Set(wordChoices);
-        for (let i of answerSet) {
-          if (wordSet.has(i)) {
-            matches.add(entry);
-          }
-    if(poemList){
-    poemList.map((entry) => {
-      let allWordString = entry.lines.join(" ").toLowerCase(); //join the array of lines and make it all lower case
-      let wordArray = allWordString.split(" "); // Split the string into an array of words
-      const wordSet = new Set(wordArray); // make a set of all words
-      const answerSet = new Set(wordChoices);
-      for (let i of answerSet) {
-        if (wordSet.has(i)) {
-          matches.add(entry);
-        }
-      });
-    }
-    setMatch(Array.from(matches));
-    setUserScore(matches.size);
-    console.log("Log Matched objects", matches);
-      }
-    })};
-    setMatch(Array.from(matches));
-    setUserScore(matches.size)
-    console.log("Log Matched objects", matches)
-  }
+      fetchPoems(poetName);
+      return "null"
+    } 
+
   function fetchPoems(poetName) {
     //let poemNum = Math.floor(Math.random() * 10);
     console.log("you are trying to fetch", poetName);
@@ -95,6 +69,7 @@ export default function App() {
       })
       .catch((error) => console.error(error));
   }
+
   useEffect(() => {
     // Everything in here gets run once on first page load
     fetchAuthorList();
@@ -170,7 +145,7 @@ export default function App() {
               console.log(wordOne);
               //setTitleWord(wordOne)
               console.log("Titles containing: " + titleWord);
-              setMatch(fetchTitleMatches(wordOne));
+              
               //setUserScore[matchPoems.length]
             }}
           >
@@ -188,7 +163,7 @@ export default function App() {
               console.log(wordTwo);
               console.log(wordThree);
               console.log(authorInput);
-              setMatch(findMatches(authorChoice, wordOne, wordTwo, wordThree)); // Pass all the words to the find matches rather than making a new object/ set. set poens to what we find
+              findMatches(authorChoice, wordOne, wordTwo, wordThree); // Pass all the words to the find matches rather than making a new object/ set. set poens to what we find
               findMatches(authorChoice);
             }}
           >
@@ -249,32 +224,23 @@ export default function App() {
       {/* End hero unit */}
 
       <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={5}
-          justifyContent="center"
-          alignItems="flex-start"
-        >
-          {[...matchPoems].map((entry, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <CharacterCard
-                title={entry.title}
-                description={entry.lines}
-                keywords={wordChoices}
-              />
-            </Grid>
-        <Grid container spacing={5}  justifyContent="center" alignItems="flex-start" >
-          {[...matchPoems].map((entry, index) => (
-            <Grid item xs={12} md={4} key = {index}>
-            <CharacterCard
-              title={entry.title}
-              description={entry.lines}
-            />
-          </Grid>
-          ))}
-        </Grid>
-      </Container>
+  <Grid
+    container
+    spacing={5}
+    justifyContent="center"
+    alignItems="flex-start"
+  >
+    {[...matchPoems].map((entry, index) => (
+      <Grid item xs={12} md={4} key={index}>
+        <CharacterCard
+          title={entry.title}
+          description={entry.lines}
+        />
+      </Grid>
+    ))}
+  </Grid>
+</Container>
     </div>
-  );
+  )
 }
 export default App;
