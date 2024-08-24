@@ -47,7 +47,8 @@ function App() {
   }
 
 
-  function findMatches(poetName) {
+  function findMatches(poetName, wordOne, wordTwo, wordThree) {
+      
       fetchPoems(poetName);
       return "null"
     } 
@@ -63,6 +64,7 @@ function App() {
       .then((response) => response.json())
       .then((result) => {
         let res = result;
+        console.log(poemList)
         //console.log("From fetch poem", res);
         //put the object in a var
         setPoemList(res);
@@ -164,7 +166,6 @@ function App() {
               console.log(wordThree);
               console.log(authorInput);
               findMatches(authorChoice, wordOne, wordTwo, wordThree); // Pass all the words to the find matches rather than making a new object/ set. set poens to what we find
-              findMatches(authorChoice);
             }}
           >
             search lines
