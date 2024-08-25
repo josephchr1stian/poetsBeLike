@@ -30,7 +30,6 @@ function App() {
   const [matchPoems, setMatchPoems] = useState([]);
   const [titleWord, setTitleWord] = useState([]);
 
-
   function fetchAuthorList() {
     const requestOptions = {
       method: "GET",
@@ -39,23 +38,26 @@ function App() {
     fetch("https://poetrydb.org/author", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.authors);
-        console.log(authorList);
         setAuthorList(result.authors);
       })
       .catch((error) => console.error(error));
   }
 
-
   function findMatches(poetName, wordOne, wordTwo, wordThree) {
-      
-      fetchPoems(poetName);
-      return "null"
-    } 
+    fetchPoems(poetName, wordOne, wordTwo, wordThree);
+    return "null";
+  }
 
-  function fetchPoems(poetName) {
+  function fetchPoems(poetName, wordOne, wordTwo, wordThree) {
     //let poemNum = Math.floor(Math.random() * 10);
-    console.log("you are trying to fetch", poetName);
+    console.log(
+      "Finding Poems containing words,",
+      wordOne,
+      wordTwo,
+      wordThree,
+      " written by",
+      poetName
+    );
     const requestOptions = {
       method: "GET",
       redirect: "follow",
@@ -63,11 +65,18 @@ function App() {
     fetch("https://poetrydb.org/author/" + poetName, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        let res = result;
-        console.log(poemList)
-        //console.log("From fetch poem", res);
-        //put the object in a var
-        setPoemList(res);
+        let res = [];
+        result.map((entry) => {
+          let curr = entry.lines.join(" ").toLowerCase();
+          if ( curr.includes( wordOne) || curr.includes(wordTwo) || curr.includes(wordThree) ) 
+            {
+            res.push(entry);
+          }
+          
+        });
+        console.log("Ans is", res);
+        setMatchPoems(res);
+        setUserScore(res.length)
       })
       .catch((error) => console.error(error));
   }
@@ -147,7 +156,7 @@ function App() {
               console.log(wordOne);
               //setTitleWord(wordOne)
               console.log("Titles containing: " + titleWord);
-              
+
               //setUserScore[matchPoems.length]
             }}
           >
@@ -187,7 +196,7 @@ function App() {
             onChange={(event) => {
               //console.log(newInputValue);
               let newInputValue = event.target.value;
-              setWordOne(newInputValue);
+              setWordOne(newInputValue.toLowerCase());
               //console.log(wordOne);
             }}
           />
@@ -197,18 +206,15 @@ function App() {
             onChange={(event) => {
               //console.log(newInputValue);
               let newInputValue = event.target.value;
-              setWordTwo(newInputValue);
-              //console.log(wordTwo);
+              setWordTwo(newInputValue.toLowerCase());
             }}
           />
           <TextField
             defaultValue=""
             value={wordThree}
             onChange={(event) => {
-              //console.log(newInputValue);
               let newInputValue = event.target.value;
-              setWordThree(newInputValue);
-              //console.log(wordThree);
+              setWordThree(newInputValue.toLowerCase());
             }}
           />
         </Box>
@@ -225,23 +231,20 @@ function App() {
       {/* End hero unit */}
 
       <Container maxWidth="lg">
-  <Grid
-    container
-    spacing={5}
-    justifyContent="center"
-    alignItems="flex-start"
-  >
-    {[...matchPoems].map((entry, index) => (
-      <Grid item xs={12} md={4} key={index}>
-        <CharacterCard
-          title={entry.title}
-          description={entry.lines}
-        />
-      </Grid>
-    ))}
-  </Grid>
-</Container>
+        <Grid
+          container
+          spacing={5}
+          justifyContent="center"
+          alignItems="flex-start"
+        >
+          {[...matchPoems].map((entry, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <CharacterCard title={entry.title} description={entry.lines} />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </div>
-  )
+  );
 }
 export default App;
