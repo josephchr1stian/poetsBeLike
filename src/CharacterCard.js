@@ -5,9 +5,10 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material";
 import CardHeader from "@mui/material/CardHeader";
+import { Collapse } from "@mui/material";
 import { useState } from "react";
-
 
 //I am gonna want to pass in the poem name to the character card.
 // For every card I make, you get a point
@@ -17,23 +18,6 @@ export default function CharacterCard(props) {
   const [poemLines, setPoemLines] = useState();
   const [commonWord, setCommonWord] = useState("helios");
   const poemImage = "https://picsum.photos/300?grayscale&blur=3";
-  // 0
-  // : 
-  // value
-  // : 
-  // author
-  // : 
-  // "Emily Dickinson"
-  // linecount
-  // : 
-  // "16"
-  // lines
-  // : 
-  // (19) ['Summer begins to have the look', 'Peruser of enchanting Book', 'Reluctantly but sure perceives', 'A gain upon the backward leaves --', '', 'Autumn begins to be inferred', 'By millinery of the cloud', 'Or deeper color in the shawl', 'That wraps the everlasting hill.', '', 'The eye begins its avarice', 'A meditation chastens speech', 'Some Dyer of a distant tree', 'Resumes his gaudy industry.', '', 'Conclusion is the course of All', 'At most to be perennial', 'And then elude stability', 'Recalls to immortality.']
-  // title
-  // : 
-  // "Summer begins to have the look"
-  // How the prop will come in
 
   return (
     <Card>
@@ -44,34 +28,18 @@ export default function CharacterCard(props) {
         titleTypographyProps={{ align: "center" }}
         sx={{ mt: 1 }}
       />
-      <CardContent sx={{ pt: 0 }}>
-        <ul>
-          {props.description.map((line, index) => (
-            <Typography>
-              {index + 1} - {line}
-            </Typography>
-          ))}
-        </ul>
-      </CardContent>
-      <CardActions>
-        {/* <Button
-          //variant="contained"
-          sx={{
-            px: 6,
-            mx: "auto",
-            border: "1px solid black",
-            variant: "outlined",
-          }}
-          onClick={() => {
-            fetchPoem();
-            findMostCommonWord(poemLines.join(" "));
-            setImage();
-            setCounter(counter + 1);
-          }}
-        >
-          load poem
-        </Button> */}
-      </CardActions>
+      <Accordion> 
+        <CardContent sx={{ pt: 0 }}>
+          <ul>
+            {props.description.map((line, index) => (
+              <Typography>
+                {index + 1} - {line}
+              </Typography>
+            ))}
+          </ul>
+        </CardContent>
+      </Accordion>
+      <CardActions></CardActions>
     </Card>
   );
   function findMostCommonWord(str) {
