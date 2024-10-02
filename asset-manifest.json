@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/poetsBeLike/static/css/main.d376e4b7.css",
+    "main.js": "/poetsBeLike/static/js/main.b4c25995.js",
+    "index.html": "/poetsBeLike/index.html",
+    "main.d376e4b7.css.map": "/poetsBeLike/static/css/main.d376e4b7.css.map",
+    "main.b4c25995.js.map": "/poetsBeLike/static/js/main.b4c25995.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d376e4b7.css",
+    "static/js/main.b4c25995.js"
+  ]
+}
