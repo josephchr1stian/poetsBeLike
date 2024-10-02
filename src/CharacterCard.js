@@ -28,7 +28,7 @@ export default function CharacterCard(props) {
         titleTypographyProps={{ align: "center" }}
         sx={{ mt: 1 }}
       />
-      <Accordion> 
+      {/* <Accordion>  */}
         <CardContent sx={{ pt: 0 }}>
           <ul>
             {props.description.map((line, index) => (
@@ -38,7 +38,7 @@ export default function CharacterCard(props) {
             ))}
           </ul>
         </CardContent>
-      </Accordion>
+      {/* </Accordion> */}
       <CardActions></CardActions>
     </Card>
   );
