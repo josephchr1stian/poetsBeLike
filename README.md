@@ -10,7 +10,7 @@ Poets be like : Love, death, rain.
 
 ## Bugs and issues
 
-Sometimes you have to click on the search button more than once. 
+Sometimes you have to click on the search button more than once. Usually it just takes a second.
 
 Some poems are much longer than others, leading to some nasty styling issues.
 
